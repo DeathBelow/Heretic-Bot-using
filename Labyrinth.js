@@ -15,6 +15,10 @@ client.on('message', message => {
     	message.reply('pong');
   	}
 });
+
+// THIS  MUST  BE  THIS  WAY
+client.login(process.env.BOT_TOKEN);
+
 fs.readdir("./commands", (err, files) => {
 	
 		if(err) console.log(err);
@@ -112,5 +116,4 @@ let xpAdd = Math.floor(Math.random() * 7) + 8;
 
 bot.login(botconfig.token);
 
-// THIS  MUST  BE  THIS  WAY
-client.login(process.env.BOT_TOKEN);
+
