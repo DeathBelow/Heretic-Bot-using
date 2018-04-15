@@ -1,24 +1,32 @@
+const Discord = require('discord.js');
+const botconfig = require("./Botconfig.json");
+const fs = require("fs");
+const bot = new Discord.Client({disableEveryone: true});
+let xp = require("./xp.json");
+bot.commands = new Discord.Collection();
+
 fs.readdir("./commands", (err, files) => {
 	
-		if(err) console.log(err);
+if(err) console.log(err);
 		
-		let jsfile = files.filter(f => f.split(".").pop() == "js")
-		if(jsfile.length <= 0){
-			console.log("Couldn't find commands.");
-			return;
-		}
+let jsfile = files.filter(f => f.split(".").pop() == "js")
+if(jsfile.length <= 0){
+console.log("Couldn't find commands.");
+return;
+}
 		
-	jsfile.forEach((f, i) => {
-	let props = require(`./commands/${f}`);
-	console.log(`${f} loaded.`); 
-	bot.commands.set(props.help.name, props);
-	});
+jsfile.forEach((f, i) => {
+let props = require(`./commands/${f}`);
+console.log(`${f} loaded.`); 
+bot.commands.set(props.help.name, props);
+});
+	
 });
 bot.on("ready", async () => {
-	console.log('${bot.user.username} is online.);
+console.log('${bot.user.username} is online.);
 	
-	bot.user.setActivity("Rule breakers", {type: "WATCHING")
-	//bot.user.setGame("Bullying");
+bot.user.setActivity("Rule breakers", {type: "WATCHING")
+//bot.user.setGame("Bullying");
 });
 
 bot.on("message", async message => {
@@ -48,50 +56,49 @@ bot.on("message", async message => {
 	}
 	
 	
-	if (cmd === `${prefix}hello`){
-		return message.channel.send("Hi!");
+if (cmd === `${prefix}hello`){
+return message.channel.send("Hi!");
 	
-	if(cmd === `${prefix}botinfo`){
+if(cmd === `${prefix}botinfo`){
 		
-		let bicon = bot.user.displayAvatarURL;
-			let botembed = new Discord.RichEmbed()
-			.setDescription("Bot Info")
-			.setColor("#15f153")
-			.setThumbnail(bicon)
-			.addField("Bot name", bot.user.userbane)
-			.addField("Created On", bot.user.createdAt);
+let bicon = bot.user.displayAvatarURL;
+let botembed = new Discord.RichEmbed()
+.setDescription("Bot Info")
+.setColor("#15f153")
+.setThumbnail(bicon)
+.addField("Bot name", bot.user.userbane)
+.addField("Created On", bot.user.createdAt);
 			
-			return message.channel.send(botembed);
-
+return message.channel.send(botembed);
 });
 
 let xpAdd = Math.floor(Math.random() * 7) + 8;
-  console.log(xpAdd);
+ console.log(xpAdd);
 
-  if(!xp[message.author.id]){
-    xp[message.author.id] = {
-      xp: 0,
-      level: 1
-    };
-  }
+ if(!xp[message.author.id]){
+ xp[message.author.id] = {
+ xp: 0,
+ level: 1
+ };
+ }
 
 
-  let curxp = xp[message.author.id].xp;
-  let curlvl = xp[message.author.id].level;
-  let nxtLvl = xp[message.author.id].level * 300;
-  xp[message.author.id].xp =  curxp + xpAdd;
-  if(nxtLvl <= xp[message.author.id].xp){
-    xp[message.author.id].level = curlvl + 1;
-    let lvlup = new Discord.RichEmbed()
-    .setTitle("Level Up!")
-    .setColor(purple)
-    .addField("New Level", curlvl + 1);
+ let curxp = xp[message.author.id].xp;
+ let curlvl = xp[message.author.id].level;
+ let nxtLvl = xp[message.author.id].level * 300;
+ xp[message.author.id].xp =  curxp + xpAdd;
+ if(nxtLvl <= xp[message.author.id].xp){
+ xp[message.author.id].level = curlvl + 1;
+ let lvlup = new Discord.RichEmbed()
+ .setTitle("Level Up!")
+ .setColor(purple)
+ .addField("New Level", curlvl + 1);
 
-    message.channel.send(lvlup).then(msg => {msg.delete(5000)});
-  }
-  fs.writeFile("./xp.json", JSON.stringify(xp), (err) => {
-    if(err) console.log(err)
-  });
+ message.channel.send(lvlup).then(msg => {msg.delete(5000)});
+ }
+ fs.writeFile("./xp.json", JSON.stringify(xp), (err) => {
+ if(err) console.log(err)
+ });
 
 bot.login(botconfig.token);
 
