@@ -2,13 +2,13 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 client.on('ready', () => {
-    console.log('${bot.user.username} is alive.');
-    bot.user.setGame("Bullying");
+    console.log('Alive.');
+    
 });
 
 client.on('message', message => {
-    if (message.content === 'B>Ping') {
-    	message.reply('Pong');
+    if (message.content === 'ping') {
+    	message.reply('pong');
   	}
 });
 
